@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Run Values</title>
+</head>
+<body>
+    <h2>Current Run Values:</h2>
+    {% if run %}
+        <p>
+            S1 {{ run.motor1 }},
+            S2 {{ run.motor2 }},
+            S3 {{ run.motor3 }},
+            S4 {{ run.motor4 }},
+            Status: {{ run.status }}
+        </p>
+    {% else %}
+        <p>No data available.</p>
+    {% endif %}
+</body>
+</html>

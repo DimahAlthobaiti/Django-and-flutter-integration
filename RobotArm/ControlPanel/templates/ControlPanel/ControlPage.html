@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Robot Arm Control Panel</title>
+    <style>
+        input[type=range] { width: 200px; }
+    </style>
+    <script>
+        function updateValue(slider) {
+            const span = slider.nextElementSibling;
+            span.innerText = slider.value;
+        }
+    </script>
+</head>
+<body>
+    <h2>Robot Arm Control Panel</h2>
+    <form method="post">
+        {% csrf_token %}
+        {% for field in form %}
+            <label>{{ field.label }}</label>
+            {{ field }} <span class="value-display">{{ field.value }}</span><br>
+        {% endfor %}
+        <button name="action" value="reset">Reset</button>
+        <button name="action" value="save">Save Pose</button>
+        <button type="submit" name="action" value="run">Run</button>
+    </form>
+
+    <script>
+    function updateValue(slider) {
+        const span = slider.nextElementSibling;
+        span.innerText = slider.value;
+    }
+
+    window.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('input[type="range"]').forEach(function (slider) {
+            const span = slider.nextElementSibling;
+            span.innerText = slider.value;
+
+            slider.addEventListener('input', function () {
+                span.innerText = slider.value;
+            });
+        });
+    });
+</script>
+
+    <br><br>
+    <table border="1">
+        <tr>
+            <th>#</th>
+            <th>Motor 1</th><th>Motor 2</th><th>Motor 3</th>
+            <th>Motor 4</th>
+            <th>Action</th>
+        </tr>
+        {% for pose in poses %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ pose.motor1 }}</td>
+            <td>{{ pose.motor2 }}</td>
+            <td>{{ pose.motor3 }}</td>
+            <td>{{ pose.motor4 }}</td>
+
+            <td>
+                <form method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <input type="hidden" name="load_id" value="{{ pose.id }}">
+                    <button name="action" value="load">Load</button>
+                </form>
+                <form method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <input type="hidden" name="remove_id" value="{{ pose.id }}">
+                    <button name="action" value="remove">Remove</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
